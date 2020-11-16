@@ -29,6 +29,7 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int t_start    = 0;
 int t_current  = 0;
 int t_target   = 0;
+bool weldingState = 0;
 
 
 void setup() 
@@ -117,11 +118,19 @@ void weld(void)
 {
   if (onPulse())
   {
-    digitalWrite(RELAY, HIGH);
+    if (!weldingState) // Check whether welding is OFF to turn it ON
+    {
+      digitalWrite(RELAY, HIGH);
+      weldingState = 1; 
+    }
   }
   else
   {
-    digitalWrite(RELAY, LOW);
+    if (weldingState) // Check whether welding is ON to turn it OFF
+    {
+      digitalWrite(RELAY, LOW);  // We turn the relay off but is it really off?
+      weldingState = 0;
+    }
   }
 }
  
