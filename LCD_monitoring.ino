@@ -16,6 +16,12 @@
 // define pins:
 #define RELAY          9
 #define KICK_PEDAL     6
+#define BATT_VOLT      10   // Battery Voltage Read Pin (to change)
+#define SELECT         11   // These are dummy numbers
+#define LEFT           12
+#define RIGHT          13
+#define UP             14
+#define DOWN           15
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -29,23 +35,31 @@ void setup()
 {
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
-  pinMode(9, OUTPUT);
-  pinMode(6, INPUT);
-  // Print a message to the LCD.
-  lcd.print("hello, world!");
+  pinMode(KICK_PEDAL, INPUT);
+  pinMode(BATT_VOLT,  INPUT);
+  pinMode(SELECT,     INPUT);
+  pinMode(LEFT,       INPUT);
+  pinMode(RIGHT,      INPUT);
+  pinMode(UP,         INPUT);
+  pinMode(DOWN,       INPUT);
+  pinMode(RELAY,      OUTPUT);
 }
 
 void loop() 
 {
   lcd.setCursor(0, 1);
   
+  // Update global time
   t_current = millis();
-  if (digitalRead(KICK_PEDAL)) // Needs debounce 
-  {
-    t_start = millis();
-    setPulseTime(100);     // Pulse in ms 
-  }
   
+  // Check for button press
+  (void) checkButtons();
+  // Check for foot pedal press
+  (void) checkPedal();
+  // Battery monitoring
+  (void) batteryMonitoring();
+
+ 
   if (onPulse())
   {
     digitalWrite(RELAY, HIGH);
@@ -54,6 +68,40 @@ void loop()
   {
     digitalWrite(RELAY, LOW);
   }
+}
+
+void checkButtons(void)
+{
+  if (digitalRead(LEFT))
+  {
+  }
+  if (digitalRead(RIGHT))
+  {
+  }
+  if (digitalRead(UP))
+  {
+  }
+  if (digitalRead(DOWN))
+  {
+  }
+  if (digitalRead(SELECT))
+  {
+  }
+}
+
+void checkPedal(void)
+{
+  if (digitalRead(KICK_PEDAL))
+  {
+    t_start = millis();
+    setPulseTime(100);     // Pulse in ms 
+  }
+}
+
+void batteryMonitoring(void)
+{
+  // Every 1-2 sec to read
+  // Filtering to be implemented
 }
 
 void setPulseTime(int time_in_ms)
