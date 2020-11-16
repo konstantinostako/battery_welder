@@ -59,15 +59,7 @@ void loop()
   // Battery monitoring
   (void) batteryMonitoring();
 
- 
-  if (onPulse())
-  {
-    digitalWrite(RELAY, HIGH);
-  }
-  else
-  {
-    digitalWrite(RELAY, LOW);
-  }
+  (void) weld();
 }
 
 void checkButtons(void)
@@ -118,6 +110,18 @@ bool onPulse()
   else
   {
     return false;
+  }
+}
+
+void weld(void)
+{
+  if (onPulse())
+  {
+    digitalWrite(RELAY, HIGH);
+  }
+  else
+  {
+    digitalWrite(RELAY, LOW);
   }
 }
  
